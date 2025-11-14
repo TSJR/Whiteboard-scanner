@@ -1,8 +1,6 @@
-print("1")
 import os
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "json/creds.json"
 from google.cloud import vision
-print("2")
 import io
 import json
 from openai import OpenAI
@@ -12,7 +10,7 @@ import time
 print("4")
 google_client = vision.ImageAnnotatorClient()
 
-os.environ["OPENAI_API_KEY"] = "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"
+os.environ["OPENAI_API_KEY"] = "OMITTED"
 gpt_client = OpenAI()
 
 chat_data = None
