@@ -1,13 +1,18 @@
+print("1")
 import os
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "json/creds.json"
 from google.cloud import vision
+print("2")
 import io
 import json
 from openai import OpenAI
+print("3")
 from pdflatex import PDFLaTeX
+import time
+print("4")
 google_client = vision.ImageAnnotatorClient()
 
-os.environ["OPENAI_API_KEY"] = ""
+os.environ["OPENAI_API_KEY"] = "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"
 gpt_client = OpenAI()
 
 chat_data = None
@@ -51,20 +56,40 @@ def generate_latex(raw_latex):
     with open("output/output.tex", "w") as f:
         f.write(raw_latex)
         f.close()
-
+    print("Tex file written")
     pdfl = PDFLaTeX.from_texfile('output/output.tex')
+    time.sleep(5)
+    print("pdfl generated")
     pdf, log, completed_process = pdfl.create_pdf(keep_pdf_file=True, keep_log_file=False)
+    if not completed_process:
+        print("Big problem")
+        exit(0)
     return True
 
 print("Start")
-success, extracted_text = extract_text("images/whiteboard3.png")
-if success:
-    print("Text extract begin")
-    success, raw_latex = generate_raw_latex(extracted_text)
+
+full_extracted_text = ""
+filenames = sorted(os.listdir("images"))
+
+for filename in filenames:
+    success, extracted_text = extract_text("images/" + filename)
     if success:
-        print("Raw latex extracted")
-        generate_latex(raw_latex)
+        print("Text extracted for " + filename)
+        full_extracted_text += extracted_text + "\n"
     else:
-        print(raw_latex)
+        print("No text detected")
+print("Extracted text")
+if (len(full_extracted_text) < 5):
+    exit(0)
+print(full_extracted_text)
+
+success, raw_latex = generate_raw_latex(full_extracted_text)
+if success:
+    print("Raw latex extracted. Generating pdf")
+    generate_latex(raw_latex)
 else:
-    print("No text detected")
+    print(raw_latex)
+    
+for filename in filenames:
+    os.remove("images/" + filename)
+

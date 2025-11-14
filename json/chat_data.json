@@ -1,0 +1,3 @@
+{
+    "initial-command": "You are given whiteboard text and meant to format it as either a timeline, in bullet points, as a numbered procedure, a table, or term/definition form. It should be formatted in LaTeX so it can be converted. If no text is given, Say Error in LaTeX, Don't extrapolate too much please."
+}
