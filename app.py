@@ -4,10 +4,9 @@ from google.cloud import vision
 import io
 import json
 from openai import OpenAI
-print("3")
 from pdflatex import PDFLaTeX
 import time
-print("4")
+
 google_client = vision.ImageAnnotatorClient()
 
 os.environ["OPENAI_API_KEY"] = "OMITTED"
